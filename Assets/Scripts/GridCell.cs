@@ -7,32 +7,36 @@ using UnityEngine;
 
 public class GridCell : MonoBehaviour
 {
+    // 声明一个mesh网格并赋值给MeshFilter
     public Mesh mesh;
     
+    // 声明网格顶点，用于绘制mesh网格
     public Vector3[] vertexs = new Vector3[16];
     
+    // 声明三角顶点，用于绘制mesh网格
+    // 四边形均有两个三角形绘制而成
     public int[] triangles = new int[54];
 
-    
+    // 声明当前网格的上下左右8个方向的相邻网格，在网格地图初始化时被赋值
     public GridCell neighborTop;
     public GridCell neighborBottom;
     public GridCell neighborLeft;
     public GridCell neighborRight;
-    
     public GridCell neighborTopLeft;
     public GridCell neighborTopRight;
     public GridCell neighborBottomRight;
     public GridCell neighborBottomLeft;
     
-    
+    // 声明四边形网格的方向
     public enum QuadDirections
     {
         Top, Bottom, Left, Right
     }
-    //设置顶点位置
+    
+    // 设置顶点位置
     Vector3[] setVertex()
     {
-        //约定第一个顶点在原点,从左向右，从上到下的顺序排序
+        //约定第一个顶点在原点,从左向右，从下到上的顺序排序
         vertexs[0] = new Vector3(0.2f, 0, 0.2f);
         vertexs[1] = new Vector3(0.8f, 0, 0.2f);
         vertexs[2] = new Vector3(0.8f, 0, 0.8f);
@@ -49,13 +53,14 @@ public class GridCell : MonoBehaviour
         vertexs[13] = new Vector3(0.2f, 0, 1);
         vertexs[14] = new Vector3(0, 0, 0.8f);
         vertexs[15] = new Vector3(0, 0, 0.2f);
-
         return vertexs;
     }
 
     int[] setTriangle()
     {
-        //在顺序数组中保存的就是顶点在顶点数组中的下标位置
+        // 将网格顶点按顺时针顺序存储到数组中
+        // triangles[三角形顶点] = 网格顶点
+        // 每三个顶点组成一个三角形，顶点连接顺序为顺时针时，生成的平面朝Y轴正向，逆时针则超Y轴负方向
         triangles[0] = 0;
         triangles[1] = 2;
         triangles[2] = 1;
@@ -127,13 +132,15 @@ public class GridCell : MonoBehaviour
 
     public void Awake()
     {
+        // 初始化网格
         setMesh();
         // setPlantHeight(1);
         // updateEdge(QuadDirections.Top, 1);
-        updateMesh();
+        // 重绘网格
+        redrawMesh();
     }
 
-    // Use this for initialization
+    // 首次初始化网格，以默认属性方式生成
     public void setMesh () {
         vertexs = setVertex();
         triangles = setTriangle();
@@ -145,22 +152,27 @@ public class GridCell : MonoBehaviour
         this.GetComponent<BoxCollider>().size = new Vector3(1, 0, 1);
     }
 
-    public void updateMesh()
+    // 更改网格属性，即重新读取网格顶点信息，重新绘制三角形
+    public void redrawMesh()
     {
         mesh.vertices = vertexs;
         mesh.triangles = triangles;
     }
 
+    // 设置网格高度
     public void setPlantHeight(float height)
     {
         vertexs[0].y = height;
         vertexs[1].y = height;
         vertexs[2].y = height;
         vertexs[3].y = height;
-        
+        // 网格高度发生改变，则相应的碰撞盒发生改变
         this.GetComponent<BoxCollider>().center = new Vector3(0.5f, height, 0.5f);
     }
 
+    // 更新网格的4条外部边高度
+    // 当网格高度改变，相邻网格高度未改变时，临边高度不变
+    // 当网格高度改变，相邻网格高度与当前网格一致，临边高度与网格高度一致
     public void updateEdge(QuadDirections direction, float height)
     {
         switch (direction)
@@ -184,6 +196,7 @@ public class GridCell : MonoBehaviour
         }
     }
 
+    // 测试方法，当鼠标悬浮在网格上时，通过颜色变化展示相邻网格
     private void OnMouseOver()
     {
         this.GetComponent<Renderer>().materials[0].color = Color.red;
@@ -227,6 +240,8 @@ public class GridCell : MonoBehaviour
             neighborBottomLeft.GetComponent<Renderer>().materials[0].color = Color.magenta;
         }
     }
+    
+    // 测试方法，当鼠标移开后，还原网格颜色
     private void OnMouseExit()
     {
         this.GetComponent<Renderer>().materials[0].color = Color.white;

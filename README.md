@@ -15,3 +15,11 @@ Unity 2021 LTS
 网格持久化存储与读取
 多层次网格设计
 
+## 网格地图设计思路
+![网格顶点设计](https://user-images.githubusercontent.com/29084840/212528657-bcf252ab-aa47-4b0a-bd90-d2d546e3c44d.png)
+每个网格Cell具有主要平面及8个边缘平面，主要平面与XZ平面平行作为地面，边缘平面根据相邻网格的主要平面高度判断应展示为斜坡还是应与主平面高度一致
+![查找相邻网格](https://user-images.githubusercontent.com/29084840/212528786-ea9f229f-1f03-44d9-bb44-87270c89124b.png)
+鼠标悬停展示当前网格在四边形8个方向的相邻网格
+
+
+

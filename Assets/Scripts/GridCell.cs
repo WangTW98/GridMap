@@ -7,6 +7,9 @@ using UnityEngine;
 
 public class GridCell : MonoBehaviour
 {
+    public float heightStep = 0.2f;
+
+    public float gridCellHeight = 0;
     // 声明一个mesh网格并赋值给MeshFilter
     public Mesh mesh;
     
@@ -30,7 +33,7 @@ public class GridCell : MonoBehaviour
     // 声明四边形网格的方向
     public enum QuadDirections
     {
-        Top, Bottom, Left, Right
+        Top, Bottom, Left, Right, TopLeft, BottomLeft, TopRight, BottomRight
     }
     
     // 设置顶点位置
@@ -134,7 +137,7 @@ public class GridCell : MonoBehaviour
     {
         // 初始化网格
         setMesh();
-        // setPlantHeight(1);
+        setPlantHeight(gridCellHeight);
         // updateEdge(QuadDirections.Top, 1);
         // 重绘网格
         redrawMesh();
@@ -168,6 +171,7 @@ public class GridCell : MonoBehaviour
         vertexs[3].y = height;
         // 网格高度发生改变，则相应的碰撞盒发生改变
         this.GetComponent<BoxCollider>().center = new Vector3(0.5f, height, 0.5f);
+        gridCellHeight = height;
     }
 
     // 更新网格的4条外部边高度
@@ -194,6 +198,29 @@ public class GridCell : MonoBehaviour
                 vertexs[11].y = height;
                 break;
         }
+        
+        redrawMesh();
+    }
+    
+    public void updatePoint(QuadDirections direction, float height)
+    {
+        switch (direction)
+        {
+            case QuadDirections.TopLeft:
+                vertexs[7].y = height;
+                break;
+            case QuadDirections.TopRight:
+                vertexs[6].y = height;
+                break;
+            case QuadDirections.BottomLeft:
+                vertexs[4].y = height;
+                break;
+            case QuadDirections.BottomRight:
+                vertexs[5].y = height;
+                break;
+        }
+        
+        redrawMesh();
     }
 
     // 测试方法，当鼠标悬浮在网格上时，通过颜色变化展示相邻网格
@@ -284,5 +311,70 @@ public class GridCell : MonoBehaviour
         {
             neighborBottomLeft.GetComponent<Renderer>().materials[0].color = Color.white;
         }
+    }
+
+    private void OnMouseDown()
+    {
+        setPlantHeight(heightStep);
+        edgeCalc();
+        pointCalc();
+    }
+
+    public void edgeCalc()
+    {
+        if (neighborTop && neighborTop.gridCellHeight == gridCellHeight)
+        {
+            updateEdge(QuadDirections.Top, gridCellHeight);
+            neighborTop.updateEdge(QuadDirections.Bottom,gridCellHeight);
+        }
+        if (neighborBottom && neighborBottom.gridCellHeight == gridCellHeight)
+        {
+            updateEdge(QuadDirections.Bottom, gridCellHeight);
+            neighborBottom.updateEdge(QuadDirections.Top,gridCellHeight);
+        }
+        if (neighborLeft && neighborLeft.gridCellHeight == gridCellHeight)
+        {
+            updateEdge(QuadDirections.Left, gridCellHeight);
+            neighborLeft.updateEdge(QuadDirections.Right,gridCellHeight);
+        }
+        if (neighborRight && neighborRight.gridCellHeight == gridCellHeight)
+        {
+            updateEdge(QuadDirections.Right, gridCellHeight);
+            neighborRight.updateEdge(QuadDirections.Left,gridCellHeight);
+        }
+    }
+    
+    public void pointCalc()
+    {
+        if (neighborTopLeft && neighborTopLeft.gridCellHeight == gridCellHeight && neighborTop.gridCellHeight == gridCellHeight && neighborLeft.gridCellHeight == gridCellHeight)
+        {
+            updatePoint(QuadDirections.TopLeft, gridCellHeight);
+            neighborTopLeft.updatePoint(QuadDirections.BottomRight, gridCellHeight);
+            neighborTop.updatePoint(QuadDirections.BottomLeft, gridCellHeight);
+            neighborLeft.updatePoint(QuadDirections.TopRight, gridCellHeight);
+        }
+        if (neighborBottomLeft && neighborBottomLeft.gridCellHeight == gridCellHeight && neighborBottom.gridCellHeight == gridCellHeight && neighborLeft.gridCellHeight == gridCellHeight)
+        {
+            updatePoint(QuadDirections.BottomLeft, gridCellHeight);
+            neighborBottomLeft.updatePoint(QuadDirections.TopRight, gridCellHeight);
+            neighborLeft.updatePoint(QuadDirections.BottomRight, gridCellHeight);
+            neighborBottom.updatePoint(QuadDirections.TopLeft, gridCellHeight);
+        }
+        if (neighborTopRight && neighborTopRight.gridCellHeight == gridCellHeight && neighborTop.gridCellHeight == gridCellHeight && neighborRight.gridCellHeight == gridCellHeight)
+        {
+            updatePoint(QuadDirections.TopRight, gridCellHeight);
+            neighborTopRight.updatePoint(QuadDirections.BottomLeft, gridCellHeight);
+            neighborTop.updatePoint(QuadDirections.BottomRight, gridCellHeight);
+            neighborRight.updatePoint(QuadDirections.TopLeft, gridCellHeight);
+        }
+        if (neighborBottomRight && neighborBottomRight.gridCellHeight == gridCellHeight && neighborBottom.gridCellHeight == gridCellHeight && neighborRight.gridCellHeight == gridCellHeight)
+        {
+            updatePoint(QuadDirections.BottomRight, gridCellHeight);
+            neighborBottomRight.updatePoint(QuadDirections.TopLeft, gridCellHeight);
+            neighborBottom.updatePoint(QuadDirections.TopRight, gridCellHeight);
+            neighborRight.updatePoint(QuadDirections.BottomLeft, gridCellHeight);
+        }
+        
+        redrawMesh();
     }
 }

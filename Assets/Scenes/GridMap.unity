@@ -274,8 +274,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 156c30a8a941bf7438592d7ad46b020a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  heightStep: 0.2
-  height: 0
+  drawHeightStep: 0.2
+  drawHeight: 1
+  drawRadius: 1
   quadGrid: {fileID: 517285682}
 --- !u!1 &517285681
 GameObject:
@@ -306,8 +307,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c44fd286a0b5b4c44bb525a9b75f0836, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gridWidth: 9
-  gridHeight: 9
+  gridWidth: 100
+  gridHeight: 100
   gridCell: {fileID: 1479666468625904739, guid: f3ce4fcaa30181642823cdd3bf13722d, type: 3}
   _gridCells: []
 --- !u!4 &517285683
@@ -471,7 +472,7 @@ Camera:
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 60
-  orthographic: 0
+  orthographic: 1
   orthographic size: 5
   m_Depth: -1
   m_CullingMask:
@@ -848,7 +849,7 @@ GameObject:
   - component: {fileID: 2019641834}
   - component: {fileID: 2019641833}
   m_Layer: 5
-  m_Name: Panel
+  m_Name: EditPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -924,7 +925,7 @@ GameObject:
   - component: {fileID: 2104814640}
   - component: {fileID: 2104814641}
   m_Layer: 5
-  m_Name: Slider
+  m_Name: HeightSlider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1000,7 +1001,19 @@ MonoBehaviour:
   m_MinValue: 0
   m_MaxValue: 1
   m_WholeNumbers: 0
-  m_Value: 0
+  m_Value: 0.672
   m_OnValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 498513284}
+        m_TargetAssemblyTypeName: GridEditor, Assembly-CSharp
+        m_MethodName: setEditHeight
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 1

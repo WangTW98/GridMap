@@ -324,57 +324,88 @@ public class GridCell : MonoBehaviour
 
     public void edgeCalc()
     {
-        if (neighborTop && neighborTop.gridCellHeight == gridCellHeight)
+        if (neighborTop && neighborTop.gridCellHeight >= gridCellHeight)
         {
             updateEdge(QuadDirections.Top, gridCellHeight);
             neighborTop.updateEdge(QuadDirections.Bottom,gridCellHeight);
         }
-        if (neighborBottom && neighborBottom.gridCellHeight == gridCellHeight)
+        else if(neighborTop && neighborTop.gridCellHeight < gridCellHeight)
+        {
+            updateEdge(QuadDirections.Top, neighborTop.gridCellHeight);
+            neighborTop.updateEdge(QuadDirections.Bottom,neighborTop.gridCellHeight);
+        }
+        
+        if (neighborBottom && neighborBottom.gridCellHeight >= gridCellHeight)
         {
             updateEdge(QuadDirections.Bottom, gridCellHeight);
             neighborBottom.updateEdge(QuadDirections.Top,gridCellHeight);
         }
-        if (neighborLeft && neighborLeft.gridCellHeight == gridCellHeight)
+        else if(neighborBottom && neighborBottom.gridCellHeight < gridCellHeight)
+        {
+            updateEdge(QuadDirections.Bottom, neighborBottom.gridCellHeight);
+            neighborBottom.updateEdge(QuadDirections.Top,neighborBottom.gridCellHeight);
+        }
+        
+        if (neighborLeft && neighborLeft.gridCellHeight >= gridCellHeight)
         {
             updateEdge(QuadDirections.Left, gridCellHeight);
             neighborLeft.updateEdge(QuadDirections.Right,gridCellHeight);
         }
-        if (neighborRight && neighborRight.gridCellHeight == gridCellHeight)
+        else if(neighborLeft && neighborLeft.gridCellHeight < gridCellHeight)
+        {
+            updateEdge(QuadDirections.Left, neighborLeft.gridCellHeight);
+            neighborLeft.updateEdge(QuadDirections.Right,neighborLeft.gridCellHeight);
+        }
+        
+        if (neighborRight && neighborRight.gridCellHeight >= gridCellHeight)
         {
             updateEdge(QuadDirections.Right, gridCellHeight);
             neighborRight.updateEdge(QuadDirections.Left,gridCellHeight);
+        }
+        else if(neighborRight && neighborRight.gridCellHeight < gridCellHeight)
+        {
+            updateEdge(QuadDirections.Right, neighborRight.gridCellHeight);
+            neighborRight.updateEdge(QuadDirections.Left,neighborRight.gridCellHeight);
         }
     }
     
     public void pointCalc()
     {
-        if (neighborTopLeft && neighborTopLeft.gridCellHeight == gridCellHeight && neighborTop.gridCellHeight == gridCellHeight && neighborLeft.gridCellHeight == gridCellHeight)
+        if (neighborTopLeft)
         {
-            updatePoint(QuadDirections.TopLeft, gridCellHeight);
-            neighborTopLeft.updatePoint(QuadDirections.BottomRight, gridCellHeight);
-            neighborTop.updatePoint(QuadDirections.BottomLeft, gridCellHeight);
-            neighborLeft.updatePoint(QuadDirections.TopRight, gridCellHeight);
+            float[] pointHeights = { neighborTopLeft.gridCellHeight, neighborTop.gridCellHeight, neighborLeft.gridCellHeight};
+            Array.Sort(pointHeights);
+            updatePoint(QuadDirections.TopLeft, pointHeights[0]);
+            neighborTopLeft.updatePoint(QuadDirections.BottomRight,  pointHeights[0]);
+            neighborTop.updatePoint(QuadDirections.BottomLeft,  pointHeights[0]);
+            neighborLeft.updatePoint(QuadDirections.TopRight,  pointHeights[0]);
         }
-        if (neighborBottomLeft && neighborBottomLeft.gridCellHeight == gridCellHeight && neighborBottom.gridCellHeight == gridCellHeight && neighborLeft.gridCellHeight == gridCellHeight)
+        if (neighborBottomLeft)
         {
-            updatePoint(QuadDirections.BottomLeft, gridCellHeight);
-            neighborBottomLeft.updatePoint(QuadDirections.TopRight, gridCellHeight);
-            neighborLeft.updatePoint(QuadDirections.BottomRight, gridCellHeight);
-            neighborBottom.updatePoint(QuadDirections.TopLeft, gridCellHeight);
+            float[] pointHeights = { neighborBottomLeft.gridCellHeight, neighborBottom.gridCellHeight, neighborLeft.gridCellHeight};
+            Array.Sort(pointHeights);
+            updatePoint(QuadDirections.BottomLeft, pointHeights[0]);
+            neighborBottomLeft.updatePoint(QuadDirections.TopRight, pointHeights[0]);
+            neighborLeft.updatePoint(QuadDirections.BottomRight, pointHeights[0]);
+            neighborBottom.updatePoint(QuadDirections.TopLeft, pointHeights[0]);
         }
-        if (neighborTopRight && neighborTopRight.gridCellHeight == gridCellHeight && neighborTop.gridCellHeight == gridCellHeight && neighborRight.gridCellHeight == gridCellHeight)
+        if (neighborTopRight)
         {
-            updatePoint(QuadDirections.TopRight, gridCellHeight);
-            neighborTopRight.updatePoint(QuadDirections.BottomLeft, gridCellHeight);
-            neighborTop.updatePoint(QuadDirections.BottomRight, gridCellHeight);
-            neighborRight.updatePoint(QuadDirections.TopLeft, gridCellHeight);
+            float[] pointHeights = { neighborTopRight.gridCellHeight, neighborTop.gridCellHeight, neighborRight.gridCellHeight};
+            Array.Sort(pointHeights);
+            updatePoint(QuadDirections.TopRight, pointHeights[0]);
+            neighborTopRight.updatePoint(QuadDirections.BottomLeft, pointHeights[0]);
+            neighborTop.updatePoint(QuadDirections.BottomRight, pointHeights[0]);
+            neighborRight.updatePoint(QuadDirections.TopLeft, pointHeights[0]);
         }
-        if (neighborBottomRight && neighborBottomRight.gridCellHeight == gridCellHeight && neighborBottom.gridCellHeight == gridCellHeight && neighborRight.gridCellHeight == gridCellHeight)
+        if (neighborBottomRight)
         {
-            updatePoint(QuadDirections.BottomRight, gridCellHeight);
-            neighborBottomRight.updatePoint(QuadDirections.TopLeft, gridCellHeight);
-            neighborBottom.updatePoint(QuadDirections.TopRight, gridCellHeight);
-            neighborRight.updatePoint(QuadDirections.BottomLeft, gridCellHeight);
+            float[] pointHeights = { neighborBottomRight.gridCellHeight, neighborBottom.gridCellHeight, neighborRight.gridCellHeight};
+            Array.Sort(pointHeights);
+            updatePoint(QuadDirections.BottomRight, pointHeights[0]);
+            neighborBottomRight.updatePoint(QuadDirections.TopLeft, pointHeights[0]);
+            neighborBottom.updatePoint(QuadDirections.TopRight, pointHeights[0]);
+            neighborRight.updatePoint(QuadDirections.BottomLeft, pointHeights[0]);
         }
         
         redrawMesh();

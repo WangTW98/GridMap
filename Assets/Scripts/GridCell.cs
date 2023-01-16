@@ -239,12 +239,12 @@ public class GridCell : MonoBehaviour
     
     private void OnMouseOver()
     {
-        // showNeighbors();
+        showNeighbors();
     }
 
     private void OnMouseExit()
     {
-        // hideNeighbors();
+        hideNeighbors();
     }
 
     private void OnMouseDown()

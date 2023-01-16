@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -26,8 +27,8 @@ public class GridEditor : MonoBehaviour
 
     public void setEditHeight()
     {
-        var sliderHeight = GameObject.Find("GridEditorPanel/EditPanel/HeightSlider").GetComponent<Slider>().value*10;
-        drawHeight = (int)sliderHeight - 5;
-        print(drawHeight);
+        var sliderHeight = GameObject.Find("GridEditorPanel/EditPanel/HeightSlider").GetComponent<Slider>().value;
+        drawHeight = (int)sliderHeight;
+        GameObject.Find("GridEditorPanel/EditPanel/HeightSlider/ValueLabelText").GetComponent<TMP_Text>().text = drawHeight.ToString();
     }
 }

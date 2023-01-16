@@ -1,8 +1,5 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using Unity.VisualScripting;
-using UnityEditor.SceneManagement;
 using UnityEngine;
 
 public class GridCell : MonoBehaviour
@@ -13,6 +10,9 @@ public class GridCell : MonoBehaviour
     
     // 声明网格顶点，用于绘制mesh网格
     public Vector3[] vertexs = new Vector3[16];
+    
+    private Vector3[] normals = new Vector3[16];
+    private Vector2[] uv = new Vector2[16];
     
     // 声明三角顶点，用于绘制mesh网格
     // 四边形均有两个三角形绘制而成
@@ -29,7 +29,6 @@ public class GridCell : MonoBehaviour
     public GridCell neighborBottomLeft;
 
     private GameObject gridEditorPanel;
-    // private int editHeight;
     
     // 声明四边形网格的方向
     public enum QuadDirections
@@ -152,6 +151,16 @@ public class GridCell : MonoBehaviour
         mesh = GetComponent<MeshFilter>().mesh;
         mesh.vertices = vertexs;
         mesh.triangles = triangles;
+        for (int i = 0; i < normals.Length; i++)
+        {
+            normals[i] = Vector3.forward;
+        }
+        mesh.normals = normals;
+        for (int i = 0; i < uv.Length; i++)
+        {
+            uv[i] = new Vector2(vertexs[i].x, vertexs[i].z);
+        }
+        mesh.uv = uv;
         this.AddComponent<BoxCollider>();
         this.GetComponent<BoxCollider>().center = new Vector3(0.5f, 0, 0.5f);
         this.GetComponent<BoxCollider>().size = new Vector3(1, 0, 1);
@@ -162,6 +171,9 @@ public class GridCell : MonoBehaviour
     {
         mesh.vertices = vertexs;
         mesh.triangles = triangles;
+        mesh.normals = normals;
+        mesh.normals = normals;
+        mesh.uv = uv;
     }
 
     // 设置网格高度
@@ -224,95 +236,15 @@ public class GridCell : MonoBehaviour
         
         redrawMesh();
     }
-
-    // 测试方法，当鼠标悬浮在网格上时，通过颜色变化展示相邻网格
+    
     private void OnMouseOver()
     {
-        this.GetComponent<Renderer>().materials[0].color = Color.red;
-        if (neighborTop)
-        {
-            neighborTop.GetComponent<Renderer>().materials[0].color = Color.magenta;
-        }
-
-        if (neighborBottom)
-        {
-            neighborBottom.GetComponent<Renderer>().materials[0].color = Color.magenta;
-        }
-
-        if (neighborLeft)
-        {
-            neighborLeft.GetComponent<Renderer>().materials[0].color = Color.magenta;
-        }
-
-        if (neighborRight)
-        {
-            neighborRight.GetComponent<Renderer>().materials[0].color = Color.magenta;
-        }
-
-        if (neighborTopLeft)
-        {
-            neighborTopLeft.GetComponent<Renderer>().materials[0].color = Color.magenta;
-        }
-
-        if (neighborTopRight)
-        {
-            neighborTopRight.GetComponent<Renderer>().materials[0].color = Color.magenta;
-        }
-
-        if (neighborBottomRight)
-        {
-            neighborBottomRight.GetComponent<Renderer>().materials[0].color = Color.magenta;
-        }
-
-        if (neighborBottomLeft)
-        {
-            neighborBottomLeft.GetComponent<Renderer>().materials[0].color = Color.magenta;
-        }
+        // showNeighbors();
     }
-    
-    // 测试方法，当鼠标移开后，还原网格颜色
+
     private void OnMouseExit()
     {
-        this.GetComponent<Renderer>().materials[0].color = Color.white;
-        if (neighborTop)
-        {
-            neighborTop.GetComponent<Renderer>().materials[0].color = Color.white;
-        }
-
-        if (neighborBottom)
-        {
-            neighborBottom.GetComponent<Renderer>().materials[0].color = Color.white;
-        }
-
-        if (neighborLeft)
-        {
-            neighborLeft.GetComponent<Renderer>().materials[0].color = Color.white;
-        }
-
-        if (neighborRight)
-        {
-            neighborRight.GetComponent<Renderer>().materials[0].color = Color.white;
-        }
-
-        if (neighborTopLeft)
-        {
-            neighborTopLeft.GetComponent<Renderer>().materials[0].color = Color.white;
-        }
-
-        if (neighborTopRight)
-        {
-            neighborTopRight.GetComponent<Renderer>().materials[0].color = Color.white;
-        }
-
-        if (neighborBottomRight)
-        {
-            neighborBottomRight.GetComponent<Renderer>().materials[0].color = Color.white;
-        }
-
-        if (neighborBottomLeft)
-        {
-            neighborBottomLeft.GetComponent<Renderer>().materials[0].color = Color.white;
-        }
+        // hideNeighbors();
     }
 
     private void OnMouseDown()
@@ -409,5 +341,95 @@ public class GridCell : MonoBehaviour
         }
         
         redrawMesh();
+    }
+
+    // 测试方法，当鼠标悬浮在网格上时，通过颜色变化展示相邻网格
+    public void showNeighbors()
+    {
+        this.GetComponent<Renderer>().materials[0].color = Color.red;
+        if (neighborTop)
+        {
+            neighborTop.GetComponent<Renderer>().materials[0].color = Color.magenta;
+        }
+
+        if (neighborBottom)
+        {
+            neighborBottom.GetComponent<Renderer>().materials[0].color = Color.magenta;
+        }
+
+        if (neighborLeft)
+        {
+            neighborLeft.GetComponent<Renderer>().materials[0].color = Color.magenta;
+        }
+
+        if (neighborRight)
+        {
+            neighborRight.GetComponent<Renderer>().materials[0].color = Color.magenta;
+        }
+
+        if (neighborTopLeft)
+        {
+            neighborTopLeft.GetComponent<Renderer>().materials[0].color = Color.magenta;
+        }
+
+        if (neighborTopRight)
+        {
+            neighborTopRight.GetComponent<Renderer>().materials[0].color = Color.magenta;
+        }
+
+        if (neighborBottomRight)
+        {
+            neighborBottomRight.GetComponent<Renderer>().materials[0].color = Color.magenta;
+        }
+
+        if (neighborBottomLeft)
+        {
+            neighborBottomLeft.GetComponent<Renderer>().materials[0].color = Color.magenta;
+        }
+    }
+
+    // 测试方法，当鼠标移开后，还原网格颜色
+    public void hideNeighbors()
+    {
+        this.GetComponent<Renderer>().materials[0].color = Color.white;
+        if (neighborTop)
+        {
+            neighborTop.GetComponent<Renderer>().materials[0].color = Color.white;
+        }
+
+        if (neighborBottom)
+        {
+            neighborBottom.GetComponent<Renderer>().materials[0].color = Color.white;
+        }
+
+        if (neighborLeft)
+        {
+            neighborLeft.GetComponent<Renderer>().materials[0].color = Color.white;
+        }
+
+        if (neighborRight)
+        {
+            neighborRight.GetComponent<Renderer>().materials[0].color = Color.white;
+        }
+
+        if (neighborTopLeft)
+        {
+            neighborTopLeft.GetComponent<Renderer>().materials[0].color = Color.white;
+        }
+
+        if (neighborTopRight)
+        {
+            neighborTopRight.GetComponent<Renderer>().materials[0].color = Color.white;
+        }
+
+        if (neighborBottomRight)
+        {
+            neighborBottomRight.GetComponent<Renderer>().materials[0].color = Color.white;
+        }
+
+        if (neighborBottomLeft)
+        {
+            neighborBottomLeft.GetComponent<Renderer>().materials[0].color = Color.white;
+        }
     }
 }

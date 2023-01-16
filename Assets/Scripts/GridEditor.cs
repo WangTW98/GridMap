@@ -2,19 +2,18 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GridEditor : MonoBehaviour
 {
-    public float heightStep = 0.2f;
-    public float height = 0;
+    public float drawHeightStep = 0.2f;
+    public int drawHeight = 0;
+    public int drawRadius = 1;
 
-    public GridCell curentEditGridCell;
-    public enum editState
-    {
-        eidtHeight, eidtMetrial
-    }
+    public QuadGrid quadGrid;
+
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         
     }
@@ -23,5 +22,12 @@ public class GridEditor : MonoBehaviour
     void Update()
     {
         
+    }
+
+    public void setEditHeight()
+    {
+        var sliderHeight = GameObject.Find("GridEditorPanel/EditPanel/HeightSlider").GetComponent<Slider>().value*10;
+        drawHeight = (int)sliderHeight - 5;
+        print(drawHeight);
     }
 }

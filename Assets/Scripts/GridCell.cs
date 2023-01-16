@@ -7,8 +7,6 @@ using UnityEngine;
 
 public class GridCell : MonoBehaviour
 {
-    public float heightStep = 0.2f;
-
     public float gridCellHeight = 0;
     // 声明一个mesh网格并赋值给MeshFilter
     public Mesh mesh;
@@ -29,6 +27,9 @@ public class GridCell : MonoBehaviour
     public GridCell neighborTopRight;
     public GridCell neighborBottomRight;
     public GridCell neighborBottomLeft;
+
+    private GameObject gridEditorPanel;
+    // private int editHeight;
     
     // 声明四边形网格的方向
     public enum QuadDirections
@@ -135,6 +136,7 @@ public class GridCell : MonoBehaviour
 
     public void Awake()
     {
+        // editHeight = GameObject.Find("GridEditorPanel").GetComponent<GridEditor>().drawHeight;
         // 初始化网格
         setMesh();
         setPlantHeight(gridCellHeight);
@@ -315,7 +317,7 @@ public class GridCell : MonoBehaviour
 
     private void OnMouseDown()
     {
-        setPlantHeight(heightStep);
+        setPlantHeight(GameObject.Find("GridEditorPanel").GetComponent<GridEditor>().drawHeightStep*GameObject.Find("GridEditorPanel").GetComponent<GridEditor>().drawHeight);
         edgeCalc();
         pointCalc();
     }

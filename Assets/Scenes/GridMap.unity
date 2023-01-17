@@ -1054,10 +1054,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c44fd286a0b5b4c44bb525a9b75f0836, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gridWidth: 100
-  gridHeight: 100
-  gridCell: {fileID: 1479666468625904739, guid: f3ce4fcaa30181642823cdd3bf13722d, type: 3}
-  _gridCells: []
+  gridWidth: 10
+  gridHeight: 10
+  quadCell: {fileID: 5602126312728992313, guid: aac9ee9bad8fe8043b3d0fb24e3eaf72, type: 3}
+  _quadCells: []
 --- !u!4 &517285683
 Transform:
   m_ObjectHideFlags: 0

@@ -15,6 +15,7 @@ public class GridCell : MonoBehaviour
     
     private Vector3[] normals = new Vector3[16];
     private Vector2[] uv = new Vector2[16];
+    private Vector4[] tangents = new Vector4[16];
     
     // 声明三角顶点，用于绘制mesh网格
     // 四边形均有两个三角形绘制而成
@@ -155,7 +156,7 @@ public class GridCell : MonoBehaviour
         mesh.triangles = triangles;
         for (int i = 0; i < normals.Length; i++)
         {
-            normals[i] = Vector3.forward;
+            normals[i] = Vector3.back;
         }
         mesh.normals = normals;
         for (int i = 0; i < uv.Length; i++)
@@ -163,6 +164,11 @@ public class GridCell : MonoBehaviour
             uv[i] = new Vector2(vertexs[i].x, vertexs[i].z);
         }
         mesh.uv = uv;
+        for (int i = 0; i < tangents.Length; i++)
+        {
+            tangents[i] = new Vector4(1f, 0f, 0f, -1f);
+        }
+        mesh.tangents = tangents;
         this.AddComponent<BoxCollider>();
         this.GetComponent<BoxCollider>().center = new Vector3(0.5f, 0, 0.5f);
         this.GetComponent<BoxCollider>().size = new Vector3(1, 0, 1);

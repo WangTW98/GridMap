@@ -251,16 +251,7 @@ public class GridCell : MonoBehaviour
 
     private void OnMouseDown()
     {
-        if (GameObject.Find("GridEditorPanel/EditPanel/MaterialDrawer/MaterialDrawerToggle").GetComponent<Toggle>().isOn)
-        {
-            Debug.LogWarning("aaa");
-            setGridMaterial();
-        }
-        
-        if(GameObject.Find("GridEditorPanel/EditPanel/HeightSlider/GridHeightToggle").GetComponent<Toggle>().isOn)
-        {
-            editGrid();
-        }
+        editGrid();
     }
 
     public void edgeCalc()
@@ -444,18 +435,18 @@ public class GridCell : MonoBehaviour
 
     public void editGrid()
     {
-        setPlantHeight(GameObject.Find("GridEditorPanel").GetComponent<GridEditor>().drawHeightStep*GameObject.Find("GridEditorPanel").GetComponent<GridEditor>().drawHeight);
-        edgeCalc();
-        pointCalc();
-    }
-
-    public void setGridMaterial()
-    {
-        var materialName = GameObject.Find("GridEditorPanel/EditPanel/MaterialDrawer/Label").GetComponent<TMP_Text>().text;
+        if (GameObject.Find("GridEditorPanel/EditPanel/MaterialDrawer/MaterialDrawerToggle").GetComponent<Toggle>().isOn)
+        {
+            var materialName = GameObject.Find("GridEditorPanel/EditPanel/MaterialDrawer/Label").GetComponent<TMP_Text>().text;
+            Material mat = Resources.Load<Material>("Materials/MapStyle/"+materialName+"/Material");
+            this.GetComponent<Renderer>().material = mat;
+        }
         
-        Debug.LogWarning("bbb");
-        Material mat = Resources.Load<Material>("Materials/MapStyle/"+materialName+"/Material");
-        
-        this.GetComponent<Renderer>().material = mat;
+        if(GameObject.Find("GridEditorPanel/EditPanel/HeightSlider/GridHeightToggle").GetComponent<Toggle>().isOn)
+        {
+            setPlantHeight(GameObject.Find("GridEditorPanel").GetComponent<GridEditor>().drawHeightStep*GameObject.Find("GridEditorPanel").GetComponent<GridEditor>().drawHeight);
+            edgeCalc();
+            pointCalc();
+        }
     }
 }

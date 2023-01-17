@@ -1,6 +1,8 @@
 using System;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GridCell : MonoBehaviour
 {
@@ -249,9 +251,16 @@ public class GridCell : MonoBehaviour
 
     private void OnMouseDown()
     {
-        setPlantHeight(GameObject.Find("GridEditorPanel").GetComponent<GridEditor>().drawHeightStep*GameObject.Find("GridEditorPanel").GetComponent<GridEditor>().drawHeight);
-        edgeCalc();
-        pointCalc();
+        if (GameObject.Find("GridEditorPanel/EditPanel/MaterialDrawer/MaterialDrawerToggle").GetComponent<Toggle>().isOn)
+        {
+            Debug.LogWarning("aaa");
+            setGridMaterial();
+        }
+        
+        if(GameObject.Find("GridEditorPanel/EditPanel/HeightSlider/GridHeightToggle").GetComponent<Toggle>().isOn)
+        {
+            editGrid();
+        }
     }
 
     public void edgeCalc()
@@ -431,5 +440,22 @@ public class GridCell : MonoBehaviour
         {
             neighborBottomLeft.GetComponent<Renderer>().materials[0].color = Color.white;
         }
+    }
+
+    public void editGrid()
+    {
+        setPlantHeight(GameObject.Find("GridEditorPanel").GetComponent<GridEditor>().drawHeightStep*GameObject.Find("GridEditorPanel").GetComponent<GridEditor>().drawHeight);
+        edgeCalc();
+        pointCalc();
+    }
+
+    public void setGridMaterial()
+    {
+        var materialName = GameObject.Find("GridEditorPanel/EditPanel/MaterialDrawer/Label").GetComponent<TMP_Text>().text;
+        
+        Debug.LogWarning("bbb");
+        Material mat = Resources.Load<Material>("Materials/MapStyle/"+materialName+"/Material");
+        
+        this.GetComponent<Renderer>().material = mat;
     }
 }

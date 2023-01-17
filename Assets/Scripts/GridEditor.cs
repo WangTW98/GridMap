@@ -31,4 +31,13 @@ public class GridEditor : MonoBehaviour
         drawHeight = (int)sliderHeight;
         GameObject.Find("GridEditorPanel/EditPanel/HeightSlider/ValueLabelText").GetComponent<TMP_Text>().text = drawHeight.ToString();
     }
+
+    public void setMaterial()
+    {
+        var materialData = GameObject.Find("GridEditorPanel/EditPanel/MaterialDrawer").GetComponent<TMP_Dropdown>().options;
+
+        var optionIndex = GameObject.Find("GridEditorPanel/EditPanel/MaterialDrawer").GetComponent<TMP_Dropdown>().value;
+        
+        GameObject.Find("GridEditorPanel/EditPanel/MaterialDrawer/PreviewImage").GetComponent<Image>().sprite = materialData[optionIndex].image;
+    }
 }

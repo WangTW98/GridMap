@@ -1970,7 +1970,7 @@ MonoBehaviour:
       - m_Target: {fileID: 498513284}
         m_TargetAssemblyTypeName: GridEditor, Assembly-CSharp
         m_MethodName: setMaterial
-        m_Mode: 3
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
